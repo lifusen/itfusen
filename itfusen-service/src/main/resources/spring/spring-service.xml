@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:tx="http://www.springframework.org/schema/tx"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context.xsd
+	http://www.springframework.org/schema/tx
+	http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+	<!-- scanlog action beans -->
+	<context:component-scan base-package="com.itfusen.service" />
+
+	<!--5.spring transaction -->
+	<bean id="transactionManager"
+		  class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	<tx:annotation-driven transaction-manager="transactionManager" />
+	<bean id="redisLockUtils" class="com.itfusen.service.comm.redis.RedisLockUtils"/>
+	<bean id="redisUtils" class="com.itfusen.service.comm.redis.JedisUtils"/>
+	<bean id="slCacheManager" class="com.itfusen.service.comm.redis.SLCacheManager"/>
+	<bean id="slCacheHelper" class="com.itfusen.service.comm.redis.SLCacheHelper"/>
+	<bean id="slLockManager" class="com.itfusen.service.comm.redis.SLLockManager"/>
+	<bean id="processMDMSyncDistributorLog" class="com.itfusen.service.comm.redis.SLLock">
+		<constructor-arg name="name" value="processMDMSyncDistributorLog"></constructor-arg>
+	</bean>
+	<bean id="processKPSyncDistributorLog" class="com.itfusen.service.comm.redis.SLLock">
+		<constructor-arg name="name" value="processKPSyncDistributorLog"></constructor-arg>
+	</bean>
+	<bean id="processMDMSyncLog" class="com.itfusen.service.comm.redis.SLLock">
+		<constructor-arg name="name" value="processMDMSyncLog"></constructor-arg>
+	</bean>
+	<bean id="loadingStoreId" class="com.itfusen.service.comm.redis.SLLock">
+		<constructor-arg name="name" value="loadingStoreId"></constructor-arg>
+	</bean>
+	<bean id="checkingStoreWillScore" class="com.itfusen.service.comm.redis.SLLock">
+		<constructor-arg name="name" value="checkingStoreWillScore"></constructor-arg>
+	</bean>
+	<bean id="backgroundPushOrderToYaohuoTask" class="com.itfusen.service.comm.redis.SLLock">
+		<constructor-arg name="name" value="backgroundPushOrderToYaohuoTask"></constructor-arg>
+	</bean>
+	<bean id="backgroundSummaryConvertItemTask" class="com.itfusen.service.comm.redis.SLLock">
+		<constructor-arg name="name" value="backgroundSummaryConvertItemTask"></constructor-arg>
+	</bean>
+	<bean id="loadingStoreIdByUserID" class="com.itfusen.service.comm.redis.SLLock">
+		<constructor-arg name="name" value="loadingStoreIdByUserID"></constructor-arg>
+	</bean>
+	<bean id="backgroundSummaryScanLogTask" class="com.itfusen.service.comm.redis.SLLock">
+		<constructor-arg name="name" value="backgroundSummaryScanLogTask"></constructor-arg>
+	</bean>
+	<bean id="deductStoreScoreLock" class="com.itfusen.service.comm.redis.SLLock">
+		<constructor-arg name="name" value="deductStoreScoreLock"></constructor-arg>
+	</bean>
+	<bean id="checkScanedBottle" class="com.itfusen.service.comm.redis.SLLock">
+		<constructor-arg name="name" value="checkScanedBottle"></constructor-arg>
+	</bean>
+</beans>

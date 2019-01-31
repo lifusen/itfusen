@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.itfusen.dao.user.RoleDao" >
+
+	<sql id="allColumns">ID,NAME,TYPE,STATUS</sql>
+	
+	<sql id="columns">NAME,TYPE,STATUS</sql>
+	
+	<resultMap id="simpleBean" type="com.itfusen.domain.entity.user.Role">
+		<id property="id" column="ID" />
+		<result property="name" column="NAME" />
+		<result property="type" column="TYPE" />
+		<result property="status" column="STATUS"/>
+	</resultMap>
+	
+	<insert id="insert" parameterType="com.itfusen.domain.entity.user.Role" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO ITF_ROLE (<include refid="columns" />)
+		VALUES (#{name},#{type},#{status})
+	</insert>
+	
+	<update id="update" parameterType="com.itfusen.domain.entity.user.Role">
+		UPDATE ITF_ROLE
+		 <trim prefix="set" suffixOverrides=",">
+		 	<if test="name">NAME=#{name},</if>
+		 	<if test="type">TYPE=#{type},</if>
+		 	<if test="status">STATUS=#{status},</if>
+		 </trim>
+		 WHERE ID=#{id}
+	</update>
+	
+	<select id="queryAll" resultType="List">
+		SELECT <include refid="allColumns" /> FROM ITF_ROLE
+	</select>
+	
+	<select id="queryByLongId" parameterType="Long" resultMap="simpleBean">
+		SELECT <include refid="allColumns" /> FROM ITF_ROLE WHERE ID=#{id}
+	</select>
+</mapper>

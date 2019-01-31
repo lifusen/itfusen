@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="GBK"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!--import property files -->
+<!--	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+                <value>classpath:local.properties</value>
+				<value>classpath:jdbc.properties</value>
+			</list>
+		</property>
+	</bean>-->
+
+	<import resource="spring/spring-dao.xml" />
+	<import resource="spring/spring-service.xml" />
+	<import resource="spring/spring-api.xml" />
+	<import resource="spring/spring-shiro.xml" />
+	<import resource="spring/spring-config-task.xml" />
+	<import resource="spring/spring-httpclient.xml" />
+	<import resource="spring/spring-config-redis.xml" />
+	<import resource="spring/spring-rabbitmq.xml" />
+</beans>

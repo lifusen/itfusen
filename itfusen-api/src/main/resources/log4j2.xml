@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Configuration [
+        <!ELEMENT Configuration (Properties|Appenders|Loggers)*>
+        <!ATTLIST Configuration
+                status CDATA #REQUIRED
+                monitorInterval CDATA #REQUIRED>
+        <!ELEMENT Properties (property|Property)*>
+        <!ELEMENT property (#PCDATA)>
+        <!ATTLIST property
+                name CDATA #REQUIRED>
+        <!ELEMENT Property (#PCDATA)>
+        <!ATTLIST Property
+                name CDATA #REQUIRED>
+        <!ELEMENT Appenders (Console|RollingRandomAccessFile)*>
+        <!ELEMENT Console (PatternLayout)*>
+        <!ATTLIST Console
+                name CDATA #REQUIRED
+                target CDATA #REQUIRED>
+        <!ELEMENT PatternLayout (Pattern)*>
+        <!ATTLIST PatternLayout
+                pattern CDATA #IMPLIED>
+        <!ELEMENT RollingRandomAccessFile (PatternLayout|Policies|DefaultRolloverStrategy)*>
+        <!ATTLIST RollingRandomAccessFile
+                fileName CDATA #REQUIRED
+                filePattern CDATA #REQUIRED
+                name CDATA #REQUIRED>
+        <!ELEMENT Pattern (#PCDATA)>
+        <!ELEMENT Policies (TimeBasedTriggeringPolicy|SizeBasedTriggeringPolicy)*>
+        <!ELEMENT TimeBasedTriggeringPolicy (#PCDATA)>
+        <!ATTLIST TimeBasedTriggeringPolicy
+                interval CDATA #REQUIRED
+                modulate CDATA #REQUIRED>
+        <!ELEMENT SizeBasedTriggeringPolicy (#PCDATA)>
+        <!ATTLIST SizeBasedTriggeringPolicy
+                size CDATA #REQUIRED>
+        <!ELEMENT DefaultRolloverStrategy (#PCDATA)>
+        <!ATTLIST DefaultRolloverStrategy
+                max CDATA #REQUIRED
+                min CDATA #REQUIRED>
+        <!ELEMENT Loggers (Root|Logger)*>
+        <!ELEMENT Root (AppenderRef)*>
+        <!ATTLIST Root
+                level CDATA #REQUIRED>
+        <!ELEMENT AppenderRef (#PCDATA)>
+        <!ATTLIST AppenderRef
+                ref CDATA #REQUIRED>
+        <!ELEMENT Logger (Appender-ref)*>
+        <!ATTLIST Logger
+                name CDATA #REQUIRED
+                level CDATA #REQUIRED
+                additivity CDATA #REQUIRED>
+        <!ELEMENT Appender-ref (#PCDATA)>
+        <!ATTLIST Appender-ref
+                ref CDATA #REQUIRED
+                level CDATA #REQUIRED>
+        ]>
+<Configuration  status="OFF" monitorInterval="60">
+    <Properties>
+        <property name="LOG_HOME">../logs/itfusen</property>
+        <property name="CONSOLE_FILE_NAME">console</property>
+        <property name="SACN_LOG_FILE_NAME">scanlog</property>
+        <property name="ORDER_LOG_FILE_NAME">order_log</property>
+        <property name="PRODUCT_LOG_FILE_NAME">product_log</property>
+        <property name="MDM_SYNC_LOG_FILE_NAME">mdm_sync_logger</property>
+        <property name="OAPI_LOG_FILE_NAME">oapi_logger</property>
+        <property name="STORE_LOG_FILE_NAME">store_logger</property>
+        <property name="USER_LOG_FILE_NAME">user_log</property>
+        <!--
+                %d{yyyy-MM-dd HH:mm:ss, SSS} : 日志生产时间
+                %p : 日志输出格式
+                %c : logger的名称
+                %m : 日志内容，即 logger.info("message")
+                %n : 换行符
+                %C : Java类名
+                %L : 日志输出所在行数
+                %M : 日志输出所在方法名
+                hostName : 本地机器名
+                hostAddress : 本地ip地址
+             -->
+        <Property name="pattern">%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] [%-5level] - %l - %msg%n</Property>
+    </Properties>
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] [%-5level] %logger{36} - %l - %msg%n"/>
+        </Console>
+
+
+        <!-- 这个会打印出所有的info及以下级别的信息，每次大小超过size，则这size大小的日志会自动存入按年份-月份建立的文件夹下面并进行压缩，作为存档-->
+        <RollingRandomAccessFile name="consoleFile"
+                                 fileName="${LOG_HOME}/${date:yyyy-MM-dd}/${CONSOLE_FILE_NAME}-${date:HH}-init.log"
+                                 filePattern="${LOG_HOME}/$${date:yyyy-MM-dd}/${CONSOLE_FILE_NAME}-%d{yyyy-MM-dd-HH}-%i.log">
+            <PatternLayout>
+                <Pattern>${pattern}</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy modulate="true" interval="1"/>
+                <SizeBasedTriggeringPolicy size="10 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy min="1" max="10000"/>
+        </RollingRandomAccessFile>
+
+        <!-- console file -->
+        <RollingRandomAccessFile name="sanLogFile"
+                                 fileName="${LOG_HOME}/${date:yyyy-MM-dd}/${SACN_LOG_FILE_NAME}-${date:HH}-init.log"
+                                 filePattern="${LOG_HOME}/$${date:yyyy-MM-dd}/${SACN_LOG_FILE_NAME}-%d{yyyy-MM-dd-HH}-%i.log">
+            <PatternLayout>
+                <Pattern>${pattern}</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy modulate="true" interval="12"/>
+                <SizeBasedTriggeringPolicy size="10 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy min="1" max="10000"/>
+        </RollingRandomAccessFile>
+
+        <!-- order log file -->
+        <RollingRandomAccessFile name="orderLogFile"
+                                 fileName="${LOG_HOME}/${date:yyyy-MM-dd}/${ORDER_LOG_FILE_NAME}-${date:HH}-init.log"
+                                 filePattern="${LOG_HOME}/$${date:yyyy-MM-dd}/${ORDER_LOG_FILE_NAME}-%d{yyyy-MM-dd-HH}-%i.log">
+            <PatternLayout>
+                <Pattern>${pattern}</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy modulate="true" interval="12"/>
+                <SizeBasedTriggeringPolicy size="10 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy min="1" max="10000"/>
+        </RollingRandomAccessFile>
+
+        <!-- order log file -->
+        <RollingRandomAccessFile name="storeLogFile"
+                                 fileName="${LOG_HOME}/${date:yyyy-MM-dd}/${STORE_LOG_FILE_NAME}-${date:HH}-init.log"
+                                 filePattern="${LOG_HOME}/$${date:yyyy-MM-dd}/${STORE_LOG_FILE_NAME}-%d{yyyy-MM-dd-HH}-%i.log">
+            <PatternLayout>
+                <Pattern>${pattern}</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy modulate="true" interval="12"/>
+                <SizeBasedTriggeringPolicy size="10 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy min="1" max="10000"/>
+        </RollingRandomAccessFile>
+
+        <!-- product log file -->
+        <RollingRandomAccessFile name="productLogFile"
+                                 fileName="${LOG_HOME}/${date:yyyy-MM-dd}/${PRODUCT_LOG_FILE_NAME}-${date:HH}-init.log"
+                                 filePattern="${LOG_HOME}/$${date:yyyy-MM-dd}/${PRODUCT_LOG_FILE_NAME}-%d{yyyy-MM-dd-HH}-%i.log">
+            <PatternLayout>
+                <Pattern>${pattern}</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy modulate="true" interval="12"/>
+                <SizeBasedTriggeringPolicy size="10 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy min="1" max="10000"/>
+        </RollingRandomAccessFile>
+
+
+        <!-- product log file -->
+        <RollingRandomAccessFile name="mdmSyncLogFile"
+                                 fileName="${LOG_HOME}/${date:yyyy-MM-dd}/${MDM_SYNC_LOG_FILE_NAME}-${date:HH}-init.log"
+                                 filePattern="${LOG_HOME}/$${date:yyyy-MM-dd}/${MDM_SYNC_LOG_FILE_NAME}-%d{yyyy-MM-dd-HH}-%i.log">
+            <PatternLayout>
+                <Pattern>${pattern}</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy modulate="true" interval="12"/>
+                <SizeBasedTriggeringPolicy size="10 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy min="1" max="10000"/>
+        </RollingRandomAccessFile>
+
+        <!-- oapi log file -->
+        <RollingRandomAccessFile name="oapiLogFile"
+                                 fileName="${LOG_HOME}/${date:yyyy-MM-dd}/${OAPI_LOG_FILE_NAME}-${date:HH}-init.log"
+                                 filePattern="${LOG_HOME}/$${date:yyyy-MM-dd}/${OAPI_LOG_FILE_NAME}-%d{yyyy-MM-dd-HH}-%i.log">
+            <PatternLayout>
+                <Pattern>${pattern}</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy modulate="true" interval="12"/>
+                <SizeBasedTriggeringPolicy size="10 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy min="1" max="10000"/>
+        </RollingRandomAccessFile>
+
+        <!-- oapi log file -->
+        <RollingRandomAccessFile name="userLogFile"
+                                 fileName="${LOG_HOME}/${date:yyyy-MM-dd}/${USER_LOG_FILE_NAME}-${date:HH}-init.log"
+                                 filePattern="${LOG_HOME}/$${date:yyyy-MM-dd}/${USER_LOG_FILE_NAME}-%d{yyyy-MM-dd-HH}-%i.log">
+            <PatternLayout>
+                <Pattern>${pattern}</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy modulate="true" interval="12"/>
+                <SizeBasedTriggeringPolicy size="10 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy min="1" max="10000"/>
+        </RollingRandomAccessFile>
+
+    </Appenders>
+    <Loggers>
+
+        <Root level="warn">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="consoleFile"/>
+        </Root>
+
+        <Logger name="san_log" level="DEBUG"
+                additivity="false">
+            <Appender-ref ref="sanLogFile" level="DEBUG" />
+        </Logger>
+
+        <Logger name="order_log" level="DEBUG"
+                additivity="false">
+            <Appender-ref ref="orderLogFile" level="DEBUG" />
+        </Logger>
+
+        <Logger name="store_log" level="DEBUG"
+                additivity="false">
+            <Appender-ref ref="storeLogFile" level="DEBUG" />
+        </Logger>
+
+        <Logger name="product_log" level="DEBUG"
+                additivity="false">
+            <Appender-ref ref="productLogFile" level="DEBUG" />
+        </Logger>
+        <Logger name="mdm_sync_logger" level="DEBUG"
+                additivity="false">
+            <Appender-ref ref="mdmSyncLogFile" level="DEBUG" />
+        </Logger>
+        <Logger name="oapi_logger" level="DEBUG"
+                additivity="false">
+            <Appender-ref ref="oapiLogFile" level="DEBUG" />
+        </Logger>
+        <Logger name="user_logger" level="DEBUG"
+                additivity="false">
+            <Appender-ref ref="userLogFile" level="DEBUG" />
+        </Logger>
+    </Loggers>
+</Configuration>

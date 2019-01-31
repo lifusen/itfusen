@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="GBK"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- bean  -->
+	<bean id="statisticTask" class="com.itfusen.task.StatisticTask" autowire="no" />
+	<bean id="statisticTask2" class="com.itfusen.task.StatisticTask2" autowire="no" />
+
+	<!-- 调度触发器  -->
+	<bean id="statisticTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean" autowire="no">
+		<property name="jobDetail">
+			<!-- 设置被调度的对象和方法  -->
+			<bean class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+				<property name="concurrent" value="false" />
+				<property name="targetObject" ref="statisticTask" />
+				<property name="targetMethod" value="handle" />
+			</bean>
+		</property>
+		<property name="cronExpression" value="*/10 * * * * ?" />
+	</bean>
+	<bean id="statisticTrigger2" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean" autowire="no">
+		<property name="jobDetail">
+			<!-- 设置被调度的对象和方法  -->
+			<bean class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+				<property name="concurrent" value="false" />
+				<property name="targetObject" ref="statisticTask2" />
+				<property name="targetMethod" value="handle" />
+			</bean>
+		</property>
+		<property name="cronExpression" value="*/55 * * * * ?" />
+	</bean>
+
+	<!-- 调度工厂 -->
+	<bean id="schedulerFactoryBean" class="org.springframework.scheduling.quartz.SchedulerFactoryBean" autowire="no">
+		<property name="triggers">
+			<list>
+				<ref bean="statisticTrigger" />
+				<ref bean="statisticTrigger2" />
+			</list>
+		</property>
+		<property name="startupDelay" value="2" />
+	</bean>
+</beans>

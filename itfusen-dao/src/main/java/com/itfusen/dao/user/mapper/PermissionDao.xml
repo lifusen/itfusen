@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.itfusen.dao.user.PermissionDao" >
+
+	<sql id="allColumns">ID,NAME,URL,STATUS</sql>
+	
+	<sql id="columns">NAME,URL,STATUS</sql>
+	
+	<resultMap id="simpleBean" type="com.itfusen.domain.entity.user.Permission">
+		<id property="id" column="ID" />
+		<result property="name" column="NAME" />
+		<result property="url" column="URL" />
+		<result property="status" column="STATUS"/>
+	</resultMap>
+	
+	<insert id="insert" parameterType="com.itfusen.domain.entity.user.Permission" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO ITF_PERMISSION (<include refid="columns" />)
+		VALUES (#{name},#{url},#{status})
+	</insert>
+	
+	<update id="update" parameterType="com.itfusen.domain.entity.user.Permission">
+		UPDATE ITF_ROLE
+		 <trim prefix="set" suffixOverrides=",">
+		 	<if test="name">NAME=#{name},</if>
+		 	<if test="url">URL=#{url},</if>
+		 	<if test="status">STATUS=#{status},</if>
+		 </trim>
+		 WHERE ID=#{id}
+	</update>
+	
+	<select id="queryAll" resultType="List">
+		SELECT <include refid="allColumns" /> FROM ITF_PERMISSION
+	</select>
+	
+	<select id="queryByLongId" parameterType="Long" resultMap="simpleBean">
+		SELECT <include refid="allColumns" /> FROM ITF_PERMISSION WHERE ID=#{id}
+	</select>
+</mapper>
